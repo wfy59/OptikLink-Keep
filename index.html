@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECO-AURA | Future of Earth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #2ecc71;
+            --dark-forest: #1a2a1d;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --text-light: #ecf0f1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-forest);
+            color: var(--text-light);
+            overflow-x: hidden;
+        }
+
+        /* 动态背景图片 */
+        .main-wrapper {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        /* 导航栏 */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 8%;
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--primary-green);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li { margin-left: 40px; }
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: 400;
+            transition: 0.3s;
+        }
+        nav ul li a:hover { color: var(--primary-green); }
+
+        /* 英雄展示区 */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            line-height: 1.1;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            animation: fadeInUp 1.2s ease;
+        }
+
+        /* 高级毛玻璃卡片 */
+        .stats-section {
+            padding: 100px 8%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 40px;
+            border-radius: 20px;
+            transition: transform 0.4s;
+            cursor: pointer;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-15px);
+            background: rgba(255,255,255,0.2);
+        }
+
+        .glass-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-green);
+        }
+
+        /* 动画按钮 */
+        .btn-modern {
+            padding: 15px 40px;
+            background: var(--primary-green);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(46, 204, 113, 0.3);
+        }
+
+        .btn-modern:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 25px rgba(46, 204, 113, 0.4);
+        }
+
+        /* 简单动画定义 */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        footer {
+            text-align: center;
+            padding: 50px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <nav>
+            <div class="logo">ECO-AURA</div>
+            <ul>
+                <li><a href="#">Vision</a></li>
+                <li><a href="#">Solutions</a></li>
+                <li><a href="#">Network</a></li>
+            </ul>
+        </nav>
+
+        <section class="hero">
+            <h1>Save the Blue,<br>Keep it Green.</h1>
+            <p>A high-tech approach to preserving our ancient ecosystems through sustainable innovation and collective action.</p>
+            <a href="#explore" class="btn-modern">Join the Mission</a>
+        </section>
+
+        <section id="explore" class="stats-section">
+            <div class="glass-card">
+                <h3>01. Ocean Cleanup</h3>
+                <p>Deploying advanced filtration systems to remove microplastics from our coral reefs and deep-sea habitats.</p>
+            </div>
+            <div class="glass-card">
+                <h3>02. Reforestation</h3>
+                <p>Using AI-driven drone technology to plant millions of native trees in deforested regions every month.</p>
+            </div>
+            <div class="glass-card">
+                <h3>03. Carbon Capture</h3>
+                <p>Innovative industrial solutions designed to neutralize urban emissions and return clean air to cities.</p>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 ECO-AURA INITIATIVE. Global Earth Summit.</p>
+        </footer>
+    </div>
+
+</body>
+</html>
