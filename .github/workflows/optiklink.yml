@@ -64,5 +64,5 @@ jobs:
         uses: AykutSarac/clean-workflow-runs@v1
         with:
           token: ${{ github.token }}
-          save_period: 0          # 相当于原配置的 retain_days: 0（不按天数保留）
+          save_period: 0
           minimum_runs: 3
