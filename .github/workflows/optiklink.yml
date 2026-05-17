@@ -61,9 +61,8 @@ jobs:
           retention-days: 7
 
       - name: 🧹 清理旧的运行记录
-        uses: Mattraiano/delete-workflow-runs@v2
+        uses: AykutSarac/clean-workflow-runs@v1
         with:
           token: ${{ github.token }}
-          repository: ${{ github.repository }}
-          retain_days: 0
-          keep_minimum_runs: 3
+          save_period: 0          # 相当于原配置的 retain_days: 0（不按天数保留）
+          minimum_runs: 3
