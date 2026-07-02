@@ -366,26 +366,35 @@ test('OptikLink 保活', async ({ }, testInfo) => {
 
         panelPage.setDefaultTimeout(TIMEOUT);
         activePage = panelPage;
-        console.log('⏳ 等待跳转控制台登录页...');
-        await panelPage.waitForURL(/control\.optiklink\.net\/auth\/login/, { timeout: TIMEOUT });
-        console.log(`✅ 已到达控制台登录页：${panelPage.url()}`);
+        console.log('⏳ 等待控制台页面加载...');
+        // 修复点1：放宽正则匹配，并且使用 domcontentloaded 避免页面外部资源卡加载导致超时
+        await panelPage.waitForURL(/control\.optiklink\.net/, { timeout: TIMEOUT, waitUntil: 'domcontentloaded' });
+        
+        const currentUrl = panelPage.url();
+        console.log(`✅ 已到达控制台页面：${currentUrl}`);
 
-        console.log('✏️ 填写控制台账号密码...');
-        await panelPage.fill('input[name="username"]', panelUser);
-        await panelPage.fill('input[name="password"]', panelPass);
+        // 修复点2：判断当前是否真的在登录页，如果在首页说明已经自动登录了
+        if (currentUrl.includes('/auth/login')) {
+            console.log('✏️ 填写控制台账号密码...');
+            await panelPage.fill('input[name="username"]', panelUser);
+            await panelPage.fill('input[name="password"]', panelPass);
 
-        console.log('⏳ 等待 reCAPTCHA 加载...');
-        await panelPage.waitForFunction(() => {
-            return typeof grecaptcha !== 'undefined' && grecaptcha.getResponse !== undefined;
-        }, { timeout: 15000 }).catch(() => console.log('  ℹ️ reCAPTCHA 未检测到，继续...'));
-        await panelPage.waitForTimeout(2000);
+            console.log('⏳ 等待 reCAPTCHA 加载...');
+            await panelPage.waitForFunction(() => {
+                return typeof grecaptcha !== 'undefined' && grecaptcha.getResponse !== undefined;
+            }, { timeout: 15000 }).catch(() => console.log('  ℹ️ reCAPTCHA 未检测到，继续...'));
+            await panelPage.waitForTimeout(2000);
 
-        console.log('📤 提交控制台登录...');
-        await panelPage.click('button[type="submit"]');
+            console.log('📤 提交控制台登录...');
+            await panelPage.click('button[type="submit"]');
 
-        console.log('⏳ 确认到达控制台首页...');
-        await panelPage.waitForURL(url => !url.toString().includes('/auth/login'), { timeout: TIMEOUT });
-        console.log(`✅ 控制台登录成功！当前：${panelPage.url()}`);
+            console.log('⏳ 确认到达控制台首页...');
+            // 这里同样加上 waitUntil: 'domcontentloaded'
+            await panelPage.waitForURL(url => !url.toString().includes('/auth/login'), { timeout: TIMEOUT, waitUntil: 'domcontentloaded' });
+            console.log(`✅ 控制台登录成功！当前：${panelPage.url()}`);
+        } else {
+            console.log('ℹ️ 检测到已不在登录页，可能已自动鉴权并跳转至首页...');
+        }
 
         await panelPage.waitForTimeout(2000);
 
