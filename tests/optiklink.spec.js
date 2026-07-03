@@ -359,15 +359,19 @@ test('OptikLink 保活', async ({ }, testInfo) => {
         await page.waitForTimeout(2000);
 
         console.log('📤 点击 Panel Login...');
+
+        // 最佳实践：通过 Role 和文本定位按钮，并显式等待其完全可见
+        const panelLoginBtn = page.getByRole('button', { name: 'Panel Login' });
+        await panelLoginBtn.waitFor({ state: 'visible' });
+
         const [panelPage] = await Promise.all([
             page.context().waitForEvent('page'),
-            page.click('a[href="https://control.optiklink.net/auth/login"]'),
+            panelLoginBtn.click(),
         ]);
 
         panelPage.setDefaultTimeout(TIMEOUT);
         activePage = panelPage;
         console.log('⏳ 等待控制台页面加载...');
-        // 修复点1：放宽正则匹配，并且使用 domcontentloaded 避免页面外部资源卡加载导致超时
         await panelPage.waitForURL(/control\.optiklink\.net/, { timeout: TIMEOUT, waitUntil: 'domcontentloaded' });
         
         const currentUrl = panelPage.url();
