@@ -4,16 +4,17 @@ on:
   schedule:
     - cron: '0 1 */2 * *'
   workflow_dispatch:
-  
+
 permissions:
   actions: write
-  contents: read
+  contents: write
 
 jobs:
   keepalive:
     name: 🔄 执行保活
     runs-on: ubuntu-latest
     timeout-minutes: 10
+
     steps:
       - name: 📥 拉取代码
         uses: actions/checkout@v4
@@ -47,9 +48,9 @@ jobs:
       - name: 🚀 运行保活脚本
         env:
           DISCORD_ACCOUNT: ${{ secrets.DISCORD_ACCOUNT }}
-          PANEL_ACCOUNT:   ${{ secrets.PANEL_ACCOUNT }}
-          TG_BOT:          ${{ secrets.TG_BOT }}
-          GOST_PROXY:      http://127.0.0.1:8080
+          PANEL_ACCOUNT: ${{ secrets.PANEL_ACCOUNT }}
+          TG_BOT: ${{ secrets.TG_BOT }}
+          GOST_PROXY: http://127.0.0.1:8080
         run: npx playwright test
 
       - name: 📸 上传失败截图
@@ -67,3 +68,32 @@ jobs:
           repository: ${{ github.repository }}
           retain_days: 0
           keep_minimum_runs: 3
+
+      - name: 📝 更新 README 最近运行时间
+        run: |
+          sed -i '/<!-- LAST_RUN_START -->/,/<!-- LAST_RUN_END -->/d' README.md
+
+          cat >> README.md << EOF
+
+          <!-- LAST_RUN_START -->
+          ## 🚀 最近运行时间
+
+          - 北京时间：$(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S')
+          - UTC 时间：$(date -u '+%Y-%m-%d %H:%M:%S')
+          <!-- LAST_RUN_END -->
+          EOF
+
+      - name: 📤 提交 README
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add README.md
+
+          if git diff --cached --quiet; then
+            echo "README 没有变化，跳过提交。"
+            exit 0
+          fi
+
+          git commit -m "📝 更新最近运行时间"
+          git push
